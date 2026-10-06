@@ -27,6 +27,12 @@
 
 <!DOCTYPE html>
 
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
@@ -101,34 +107,28 @@
 <div class="tldr"><strong>Before Step 2: </strong>Install a Conda distribution for your operating system, then open a new terminal and verify it with <code>conda --version</code>.</div></section>
 <section>
 <h3>Step 2: Creating the Clean Room</h3>
-<p><strong>Windows: </strong><a href="https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe">Download Miniconda .exe</a> → install to the default location.<br/><strong>Linux: </strong><a href="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh">Download Miniconda .sh</a> → download to ~/Downloads.</p>
-<div class="tldr"><strong>After install: </strong>restart PowerShell or Terminal before the next commands.</div><pre><code class="language-powershell"># PowerShell (default install location)
-&amp; "$HOME\miniconda3\Scripts\conda.exe" init powershell
-# Close and reopen PowerShell</code></pre><pre><code class="language-bash"># Linux Terminal
-bash ~/Downloads/Miniconda3-latest-Linux-x86_64.sh
-# Answer yes when asked to initialize conda; then close/reopen Terminal</code></pre>
+<p><strong>Windows (PowerShell): </strong>install Miniconda with winget, then open Anaconda Prompt from Start.<br/><strong>Linux: </strong><a href="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh">Download Miniconda .sh</a> to ~/Downloads.</p>
+<pre><code class="language-powershell">winget install --id Anaconda.Miniconda3 -e --source winget</code></pre><pre><code class="language-bash">bash ~/Downloads/Miniconda3-latest-Linux-x86_64.sh
+# Complete setup and initialize conda when prompted</code></pre><div class="tldr"><strong>Windows: </strong>After install, open <code>Anaconda Prompt</code> from Start.</div>
 </section>
-<section>
-<h3>Step 3: Entering the Environment</h3>
-<p>Activate the class environment, install Git with the command for your OS, then clone the course repository.</p>
-<pre><code class="language-bash">conda --version
-conda create -n ai python=3.10 pip -y
-conda activate ai</code></pre><pre><code class="language-bash"># Windows PowerShell
-winget install --id Git.Git -e --source winget
-
-# Linux (Ubuntu/Debian)
+<section><h3>Step 3: Entering the Environment</h3><p>In Anaconda Prompt (Windows) or Terminal (Linux):</p><pre><code class="language-batch"># Windows: Conda environment and Git
+conda --version
+conda create -n ai python=3.10 pip
+conda activate ai
+winget install --id Git.Git -e --source winget</code></pre><pre><code class="language-bash"># Linux (Ubuntu/Debian)
+conda --version
+conda create -n ai python=3.10 pip
+conda activate ai
 sudo apt update
-sudo apt install git -y</code></pre><p>Restart the shell if needed, then set your Git identity and download the course files:</p><pre><code class="language-bash">git --version
+sudo apt install git -y</code></pre><p>After Git installs, run these in the same shell (reopen it if git is not recognized):</p><pre><code class="language-bash">git --version
 git config --global user.name "Your Name"
 git config --global user.email "you@example.com"
 git clone https://github.com/shkimmie-umb/CS470_tutorial_quiz.git
-cd CS470_tutorial_quiz</code></pre>
-<div class="tldr"><strong>Git installers: </strong><a href="https://git-scm.com/install/windows">Windows installer</a> · <a href="https://git-scm.com/install/linux.html">Linux package commands</a></div>
-</section>
+cd CS470_tutorial_quiz</code></pre></section>
 <section>
 <h3>Step 4: Installing the AI Brain</h3>
-<p>Run these commands in the active (ai) PowerShell or Terminal:</p>
-<pre><code class="language-bash"># In PowerShell (Windows) or Terminal (Linux)
+<p>Run these commands in the active (ai) Anaconda Prompt (Windows) or Terminal (Linux):</p>
+<pre><code class="language-bash"># In Anaconda Prompt (Windows) or Terminal (Linux)
 conda activate ai
 
 python -m pip install --upgrade pip
