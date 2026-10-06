@@ -1,0 +1,447 @@
+<!doctype html>
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>PyTorch Masterclass: Quick, Dirty, &amp; Deep</title>
+<link href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/dracula.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/monokai.css" rel="stylesheet"/>
+<style>
+        .reveal .slides { text-align: left; }
+        
+        /* Terminal Output Style */
+        .output { background-color: #0d1117; color: #50fa7b; padding: 10px; font-family: 'Courier New', monospace; font-size: 0.65em; border-radius: 8px; margin-top: 10px; border-left: 5px solid #50fa7b; font-weight: bold;}
+        
+        /* Punchy Explanation Box (Now on EVERY slide) */
+        .tldr { background: rgba(255, 255, 255, 0.05); padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 5px solid #ffb86c; font-size: 0.70em; line-height: 1.5; }
+        .tldr strong { color: #ffb86c; font-size: 1.15em; display: block; margin-bottom: 5px;}
+        
+        /* Code Box */
+        .reveal pre { margin-bottom: 10px; width: 100%; box-shadow: 0 4px 8px rgba(0,0,0,0.4); border-radius: 8px;}
+        .reveal pre code { max-height: 400px; font-size: 0.7em; line-height: 1.3; padding: 15px;}
+        
+        /* Typography */
+        .reveal h2 { color: #ff5555; text-transform: none; font-size: 1.6em; font-weight: bold; text-align: center; margin-bottom: 30px;}
+        .reveal h3 { color: #8be9fd; text-transform: none; font-size: 1.3em; margin-bottom: 15px;}
+        p, li { font-size: 0.8em; margin-bottom: 10px; line-height: 1.4;}
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .center-text { text-align: center; color: #f1fa8c; font-style: italic; }
+
+        @media print {
+    .reveal .slides section {
+        /* Force the dark background to print */
+        background-color: #282a36 !important; /* Dracula theme background */
+        color: #f8f8f2 !important;
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+    }
+    .tldr {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border-left: 5px solid #ffb86c !important;
+    }
+    .output {
+        background-color: #000000 !important;
+        border-left: 5px solid #50fa7b !important;
+    }
+}
+    </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+<section>
+<h2>0. Live Setup (Local Environment)</h2>
+<p class="center-text">Let's build your professional deep learning workspace.</p>
+<div class="tldr">
+<strong>Why are we doing this?</strong>
+                        Before writing a single line of AI code, we must construct a safe, isolated room in your computer. This prevents PyTorch from breaking your other Python projects, and allows us to hook up your GPU.
+                    </div>
+</section>
+<section>
+<h3>Step 1: Why Virtual Environments?</h3>
+<ul>
+<li>Python projects require specific versions of libraries.</li>
+<li>If Project A needs PyTorch 1.0 and Project B needs PyTorch 2.0, installing them globally causes <strong>Dependency Hell</strong>.</li>
+<li><strong>Solution:</strong> Conda creates "isolated boxes" for each project.</li>
+</ul>
+<div class="tldr">
+<strong>The Conda Advantage 🐍</strong>
+                        Conda isn't just for Python packages; it can install complex C++ libraries (like Nvidia's CUDA toolkit) which PyTorch desperately needs to talk to your GPU.
+                    </div>
+<div class="tldr"><strong>Before Step 2: </strong>Install a Conda distribution for your operating system, then open a new terminal and verify it with <code>conda --version</code>.</div></section>
+<section>
+<h3>Step 2: Creating the Clean Room</h3>
+<p><strong>Windows: </strong><a href="https://repo.anaconda.com/miniconda/Miniconda3-latest-Windows-x86_64.exe">Download Miniconda .exe</a> → install to the default location.<br/><strong>Linux: </strong><a href="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh">Download Miniconda .sh</a> → download to ~/Downloads.</p>
+<div class="tldr"><strong>After install: </strong>restart PowerShell or Terminal before the next commands.</div><pre><code class="language-powershell"># PowerShell (default install location)
+&amp; "$HOME\miniconda3\Scripts\conda.exe" init powershell
+# Close and reopen PowerShell</code></pre><pre><code class="language-bash"># Linux Terminal
+bash ~/Downloads/Miniconda3-latest-Linux-x86_64.sh
+# Answer yes when asked to initialize conda; then close/reopen Terminal</code></pre>
+</section>
+<section>
+<h3>Step 3: Entering the Environment</h3>
+<p>Activate the class environment, install Git with the command for your OS, then clone the course repository.</p>
+<pre><code class="language-bash">conda --version
+conda create -n ai python=3.10 pip -y
+conda activate ai</code></pre><pre><code class="language-bash"># Windows PowerShell
+winget install --id Git.Git -e --source winget
+
+# Linux (Ubuntu/Debian)
+sudo apt update
+sudo apt install git -y</code></pre><p>Restart the shell if needed, then set your Git identity and download the course files:</p><pre><code class="language-bash">git --version
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git clone https://github.com/shkimmie-umb/CS470_tutorial_quiz.git
+cd CS470_tutorial_quiz</code></pre>
+<div class="tldr"><strong>Git installers: </strong><a href="https://git-scm.com/install/windows">Windows installer</a> · <a href="https://git-scm.com/install/linux.html">Linux package commands</a></div>
+</section>
+<section>
+<h3>Step 4: Installing the AI Brain</h3>
+<p>Run these commands in the active (ai) PowerShell or Terminal:</p>
+<pre><code class="language-bash"># In PowerShell (Windows) or Terminal (Linux)
+conda activate ai
+
+python -m pip install --upgrade pip
+python -m pip install torch torchvision notebook ipykernel
+
+# Verify imports, then start Jupyter Notebook
+python -c "import torch, torchvision; print(torch.__version__, torchvision.__version__); print(torch.cuda.is_available())"
+python -m notebook</code></pre>
+<div class="tldr"><strong>Jupyter: </strong>Browser opens → <code>New &gt; Python 3</code> → Shift+Enter to run a cell.</div>
+<figure style="margin:0.6em auto 0; max-width:920px;"><svg aria-label="Illustration of Jupyter Notebook running in a browser" height="255" role="img" viewbox="0 0 920 255" width="920" xmlns="http://www.w3.org/2000/svg">
+<rect fill="#f7f8fa" height="253" rx="12" stroke="#aeb8c2" stroke-width="2" width="918" x="1" y="1"></rect>
+<rect fill="#e9edf1" height="29" rx="12" width="918" x="1" y="1"></rect><circle cx="19" cy="15" fill="#ee6b5b" r="5"></circle><circle cx="37" cy="15" fill="#e9bf3a" r="5"></circle><circle cx="55" cy="15" fill="#55b56a" r="5"></circle>
+<rect fill="#fff" height="18" rx="9" stroke="#d5dbe0" width="680" x="120" y="6"></rect><text fill="#53616d" font-family="Arial,sans-serif" font-size="11" x="138" y="19">http://localhost:8888/notebooks/Untitled.ipynb</text>
+<rect fill="#fff" height="35" width="918" x="1" y="30"></rect><text fill="#e66b31" font-family="Arial,sans-serif" font-size="19" font-weight="700" x="17" y="53">Jupyter</text><text fill="#202a33" font-family="Arial,sans-serif" font-size="14" x="92" y="52">Untitled.ipynb</text><text fill="#52616d" font-family="Arial,sans-serif" font-size="12" x="765" y="51">Python 3</text>
+<rect fill="#fff" height="30" stroke="#dce1e5" width="918" x="1" y="65"></rect><text fill="#26323a" font-family="Arial,sans-serif" font-size="12" x="18" y="85">File   Edit   View   Insert   Cell   Kernel   Help</text>
+<rect fill="#f1f3f5" height="31" rx="4" stroke="#d6dce1" width="884" x="18" y="103"></rect><text fill="#26323a" font-family="Arial,sans-serif" font-size="12" x="31" y="123">▶ Run</text><text fill="#26323a" font-family="Arial,sans-serif" font-size="12" x="97" y="123">＋ Code</text><text fill="#26323a" font-family="Arial,sans-serif" font-size="12" x="171" y="123">Save</text><text fill="#52616d" font-family="Arial,sans-serif" font-size="11" x="840" y="123">Trusted</text>
+<rect fill="#fff" height="56" rx="4" stroke="#e66b31" stroke-width="2" width="884" x="18" y="145"></rect><text fill="#66727d" font-family="Menlo,monospace" font-size="13" x="28" y="166">In [1]:</text><text fill="#253746" font-family="Menlo,monospace" font-size="14" x="103" y="166">import torch</text><text fill="#253746" font-family="Menlo,monospace" font-size="14" x="103" y="187">print(torch.__version__)</text>
+<text fill="#66727d" font-family="Menlo,monospace" font-size="12" x="29" y="224">Out [1]:</text><text fill="#276b3d" font-family="Menlo,monospace" font-size="13" x="103" y="224">2.x.x</text>
+<text fill="#596773" font-family="Arial,sans-serif" font-size="11" text-anchor="middle" x="460" y="246">Illustrative browser view — Jupyter runs locally on your computer</text>
+</svg></figure></section>
+<section>
+<h3>✅ Live Code 1: Check Your Engine</h3>
+<p>Run this cell in a Jupyter code cell. PyTorch uses CUDA when available and otherwise selects the CPU.</p>
+<pre><code class="language-python">import torch
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(f"Version: {torch.__version__}")
+print(f"GPU Ready: {torch.cuda.is_available()}")
+print(f"Selected device: {device}")</code></pre>
+<div class="output">Version: 2.1.0+cu118
+GPU Ready: True</div>
+<div class="tldr"><strong>GPU is optional: </strong>When CUDA is unavailable, PyTorch runs on the CPU. This classification demo still works; training large models will take longer.</div>
+</section>
+</section>
+<section>
+<section>
+<h2>2. The Quickstart</h2>
+<p class="center-text">A 10,000-foot view of an AI pipeline.</p>
+<div class="tldr">
+<strong>The Big Picture 🌍</strong>
+                        Before we look at the microscopic details, let's fly over a complete deep learning workflow: Data -&gt; Batches -&gt; Model -&gt; Training -&gt; Evaluation.
+                    </div>
+</section>
+<section>
+<h3>Step 1: Get the Data</h3>
+<pre><code class="language-python">from torchvision import datasets
+from torchvision.transforms import ToTensor
+
+# Download Fashion Images
+train_data = datasets.FashionMNIST(
+    root="data", train=True, download=True, transform=ToTensor()
+)</code></pre>
+<div class="tldr">
+<strong>ToTensor() is mandatory 🖼️</strong>
+                        Images are made of pixels ranging from 0-255. Neural networks hate large numbers. `ToTensor` instantly squashes all pixels into decimals between 0.0 and 1.0.
+                    </div>
+<div class="tldr"><strong>Check: </strong>Keep the requested data and labels intact; check batch and label shapes.</div></section>
+<section>
+<h3>Step 2: DataLoader</h3>
+<pre><code class="language-python">from torch.utils.data import DataLoader
+
+# Batch data into chunks of 64
+train_loader = DataLoader(train_data, batch_size=64)
+
+for X, y in train_loader:
+    print(X.shape) # Images
+    print(y.shape) # Labels
+    break</code></pre>
+<div class="output">torch.Size([64, 1, 28, 28])
+torch.Size([64])</div>
+<div class="tldr">
+<strong>Why Batch? 📦</strong>
+                        You cannot shove 60,000 images into a GPU at once; the memory will explode. The DataLoader acts like a conveyor belt, feeding the GPU exactly 64 images at a time.
+                    </div>
+</section>
+<section>
+<h3>Step 3: The Model</h3>
+<pre><code class="language-python">from torch import nn
+
+class NeuralNetwork(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.flatten = nn.Flatten()
+        self.stack = nn.Sequential(
+            nn.Linear(28*28, 512), nn.ReLU(),
+            nn.Linear(512, 10)
+        )
+
+    def forward(self, x):
+        return self.stack(self.flatten(x))</code></pre>
+<div class="tldr">
+<strong>The Architecture 🏗️</strong>
+                        `nn.Module` is the base template. `__init__` is where you buy your Lego bricks (layers). `forward()` is where you click them together to define how the data flows.
+                    </div>
+</section>
+<section>
+<h3>Step 6: Evaluation</h3>
+<pre><code class="language-python">model.eval() # Freeze training features!
+correct = 0
+
+with torch.no_grad(): # Turn off gradient memory
+    for X, y in test_loader:
+        pred = model(X.to("cuda"))
+        correct += (pred.argmax(1) == y.to("cuda")).sum().item()
+
+print(f"Accuracy: {correct / len(test_data)}")</code></pre>
+<div class="tldr">
+<strong>Testing without learning 🛑</strong>
+                        We use `no_grad()` to stop PyTorch from tracking calculus, which saves massive memory. We use `eval()` to stop layers like Dropout from messing up our final test.
+                    </div>
+<div class="tldr"><strong>Check: </strong>Report only results produced by the executed evaluation; keep notebook outputs consistent with any stated result.</div></section>
+</section>
+<section>
+<section>
+<h2>3. Tensors</h2>
+<p class="center-text">The microscopic building blocks of AI.</p>
+<div class="tldr">
+<strong>What is a Tensor?</strong>
+                        It is a multi-dimensional matrix. It looks and acts exactly like a NumPy array, but with two superpowers: it can live on a GPU, and it remembers its own calculus history.
+                    </div>
+</section>
+<section>
+<h3>Tensor DNA (Attributes)</h3>
+<pre><code class="language-python">t = torch.rand(3, 4)
+
+print(t.shape)   # Dimensions
+print(t.dtype)   # Data type (float32, int64)
+print(t.device)  # CPU or GPU?</code></pre>
+<div class="output">torch.Size([3, 4])
+torch.float32
+cpu</div>
+<div class="tldr">
+<strong>Bug Alert 🐛</strong>
+                        90% of your deep learning errors will be because Tensor A's `shape` doesn't match Tensor B, or Tensor A is on the CPU while Tensor B is on the GPU.
+                    </div>
+<div class="tldr"><strong>Check: </strong>Preserve image proportions. Resize then center-crop or pad; do not stretch a photo to a square. Preprocessing is required.</div></section>
+</section>
+<section>
+<section>
+<h2>5. Transforms</h2>
+<p class="center-text">Massaging raw data into clean mathematical arrays.</p>
+<div class="tldr">
+<strong>Why do we need this? 🧼</strong>
+                        Images are different sizes, pixels are huge numbers, and labels are text words. Neural networks only understand standardized, small decimals. Transforms fix this.
+                    </div>
+</section>
+<section>
+<h3>ToTensor()</h3>
+<pre><code class="language-python">from torchvision.transforms import ToTensor
+
+# Transforms PIL images to FloatTensors
+transform = ToTensor()</code></pre>
+<div class="tldr">
+<strong>The Hidden Math ➗</strong>
+                        `ToTensor` doesn't just change the format. It takes a pixel with a color value of `255` and divides it by 255. Now it is `1.0`. This prevents "exploding gradients" during matrix math.
+                    </div>
+<div class="tldr"><strong>Check: </strong>For pretrained weights, use their matching preprocessing: resize/crop, scale, and normalize.</div></section>
+</section>
+<section>
+<section>
+<h2>7. Autograd</h2>
+<p class="center-text">The engine that computes complex derivatives instantly.</p>
+<div class="tldr">
+<strong>The Core of AI 🧠</strong>
+                        Autograd is why Deep Learning exists today. It calculates the exact derivative of millions of parameters in milliseconds, telling the model exactly how to correct its mistakes.
+                    </div>
+</section>
+<section>
+<h3>Turning Autograd OFF</h3>
+<p>Tracking math takes massive memory. Turn it off when testing!</p>
+<pre><code class="language-python"># Method 1: Context Manager (Best for inference)
+with torch.no_grad():
+    y = w * x
+print(y.requires_grad)
+
+# Method 2: Detach (For a single tensor)
+z = (w * x).detach()
+print(z.requires_grad)</code></pre>
+<div class="output">False
+False</div>
+<div class="tldr">
+<strong>Save your RAM 💾</strong>
+                        If you run testing data without `torch.no_grad()`, PyTorch will needlessly build massive derivative graphs, eventually crashing your GPU memory.
+                    </div>
+<div class="tldr"><strong>Check: </strong>For inference, use both model.eval() and torch.no_grad(); they do different jobs.</div></section>
+</section>
+<section>
+<section>
+<h2>9. Save &amp; Load</h2>
+<p class="center-text">Don't lose your 40-hour training run when the PC reboots.</p>
+<div class="tldr">
+<strong>Preserving Knowledge 🧠</strong>
+                        A trained model is just a giant list of perfectly tuned decimals. We need to save those decimals to the hard drive.
+                    </div>
+</section>
+<section>
+<h3>The Evaluation Trap ☠️</h3>
+<pre><code class="language-python"># You MUST call this before testing/inference!
+new_model.eval()</code></pre>
+<div class="tldr">
+<strong>Avoid Wild Predictions 🎲</strong>
+                        Layers like `Dropout` randomly turn off neurons to prevent overfitting. `eval()` freezes the network so it behaves consistently and accurately for users.
+                    </div>
+<div class="tldr"><strong>Check: </strong>After loading weights for inference, call eval() before predicting.</div></section>
+</section>
+<section>
+<section>
+<h2>13. Live Toy Project: Cats vs. Dogs</h2>
+<p class="center-text">Let's build the ultimate AI "Hello World" right now.</p>
+<div class="tldr">
+<strong>🎬 The Grand Finale!</strong><br/>
+                        No more boring numbers. We are building a real-world image classifier. We'll use PyTorch to auto-download thousands of pet photos and a world-class AI brain in seconds. Let's code!
+                    </div>
+</section>
+<section>
+<h3>Step 1: Auto-Download the Dataset</h3>
+<p>We use the built-in Oxford-IIIT Pet dataset. No messy zip files!</p>
+<div class="grid">
+<div>
+<pre><code class="language-python">from torchvision import datasets, transforms
+
+# 1. Resize all photos &amp; convert to tensors
+transform = transforms.Compose([
+    transforms.Resize((128, 128)),
+    transforms.ToTensor()
+])
+
+# 2. Auto-download 3,680 pet photos!
+pets = datasets.OxfordIIITPet(root='./data', download=True, transform=transform)
+
+print(f"Downloaded {len(pets)} furry friends!")</code></pre>
+</div>
+<div>
+<div class="output">Downloading https://thor.robots.ox.ac...
+Extracting data/oxford-iiit-pet/images.tar.gz
+Downloaded 3680 furry friends!</div>
+<div class="tldr">
+<strong>🐶 Free Data!</strong><br/>
+                                PyTorch has popular datasets built-in. `download=True` fetches gigabytes of perfectly formatted data straight from Oxford University in one line of code.
+                            </div>
+</div>
+</div>
+</section>
+<section>
+<h3>Step 4: Auto-Download a Pro Model</h3>
+<p>Don't want to train from scratch? Borrow a supercomputer's brain.</p>
+<div class="grid">
+<div>
+<pre><code class="language-python">import torch
+from torchvision.models import resnet18, ResNet18_Weights
+
+# Select the GPU when available; otherwise use the CPU
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+weights = ResNet18_Weights.DEFAULT
+pro_model = resnet18(weights=weights).to(device)
+pro_model.eval()
+print("Pro Brain Downloaded &amp; Locked on", device)</code></pre>
+</div>
+<div>
+<div class="output">Downloading: "https://...resnet18.pth" 
+100%|██████████| 44.7M/44.7M [00:01]
+Pro Brain Downloaded &amp; Locked!</div>
+<div class="tldr">
+<strong>⚡ Work Smart, Not Hard!</strong><br/>
+                                Why spend 50 hours training? One line downloads an AI that already knows 1,000 objects. This is "Transfer Learning" and it runs the modern AI industry.
+                            </div>
+</div>
+</div>
+<div class="tldr"><strong>Check: </strong>Use the pretrained weights’ matching transforms before inference; preserve aspect ratio rather than stretching.</div></section>
+<section>
+<h3>Step 5: Live Prediction!</h3>
+<p>Let's feed our pet image to the Pro Model and see what it thinks.</p>
+<div class="grid">
+<div>
+<pre><code class="language-python"># Add "Batch" dimension: [1, 3, 128, 128]
+batch = img.unsqueeze(0).to(device)
+
+# Turn off gradient tracking (Saves RAM!)
+with torch.no_grad():
+    pred = pro_model(batch).squeeze(0).softmax(0)
+    
+# Get the absolute highest score
+class_id = pred.argmax().item()
+conf = pred[class_id].item() * 100
+cat_name = weights.meta['categories'][class_id]
+
+print(f"AI sees: {cat_name.upper()} ({conf:.1f}%)")</code></pre>
+</div>
+<div>
+<div class="output">AI sees: ABYSSINIAN CAT (98.2%)</div>
+<div class="tldr">
+<strong>🎯 The Final Verdict!</strong><br/>
+                                We grab an image, turn off Autograd, and ask the model for its highest score. It didn't just know it was a cat; it knew the exact breed. You just built a real AI pipeline!
+                            </div>
+</div>
+</div>
+</section>
+</section>
+</div>
+</div>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script async="" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
+<script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: 'c/t', 
+            transition: 'slide',
+            center: false,
+            margin: 0.1,
+            plugins: [ RevealHighlight ]
+        });
+    </script>
+</body>
+</html>
